@@ -1,13 +1,16 @@
 package main
 
 import (
-	"github.com/PROger4ever/go-simple-news-aggregator/config"
+	"fmt"
+	"net/http"
+	"strings"
+
 	"github.com/PROger4ever/go-simple-news-aggregator/common"
+	"github.com/PROger4ever/go-simple-news-aggregator/config"
+	"github.com/PROger4ever/go-simple-news-aggregator/models"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/PROger4ever/go-simple-news-aggregator/models"
-	"fmt"
-	"time"
+	"gopkg.in/xmlpath.v2"
 )
 
 func init() {
@@ -23,26 +26,27 @@ func init() {
 }
 
 func main() {
-	o := orm.NewOrm()
+	//resp, err := http.Get("https://lenta.ru/parts/news")
+	resp, err := http.Get("https://lenta.ru/rss")
+	common.PanicIfError(err, "doing a request")
+	defer resp.Body.Close()
 
-	source := models.Source{
-		Url:                  "http://xxx.yyy.zzz/aaaa/bbbb.cccc",
-		TitleXpath:           "TitleXpath",
-		BodyXpath:            "BodyXpath",
-		PublicationTimeXpath: "PublicationTimeXpath",
+	var xmlroot *xmlpath.Node
+	contentTypeHeader := resp.Header.Get("Content-Type")
+	if strings.Contains(contentTypeHeader, "html") {
+		xmlroot, err = xmlpath.ParseHTML(resp.Body)
+	} else if strings.Contains(contentTypeHeader, "rss") {
+		xmlroot, err = xmlpath.Parse(resp.Body)
+	} else {
+		panic("Unsupported page content type")
 	}
-	article := models.Article{
-		Title:           "Title",
-		Body:            "Body",
-		Source:          &source,
-		PublicationTime: time.Date(2018, 03, 28, 23, 36, 0, 0, time.UTC),
+	common.PanicIfError(err, "parsing page content")
+
+	xpath := `//title`
+	path := xmlpath.MustCompile(xpath)
+	iter := path.Iter(xmlroot)
+	for iter.Next() {
+		fmt.Printf("Found: %s\n", iter.Node().String())
 	}
-
-	// insert
-	id, err := o.InsertOrUpdate(&source)
-	fmt.Printf("ID: %d, ERR: %v\n", id, err)
-
-	id, err = o.Insert(&article)
-	fmt.Printf("ID: %d, ERR: %v\n", id, err)
-
+	fmt.Println("done.")
 }
