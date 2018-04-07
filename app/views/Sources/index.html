@@ -1,0 +1,42 @@
+{{set . "title" "Sources"}}
+{{template "header.html" .}}
+
+<h1>News sources</h1>
+
+<div id="result">
+{{if .sources}}
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Url</th>
+            <th width="7%">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .sources}}
+        <tr>
+            <td>{{.Name}}</td>
+            <td>{{.Url}}</td>
+            <td>
+                <span><a href="{{url "Sources.Edit" .SourceId}}">Edit</a></span>
+                <span><a href="{{url "Articles.Index" .SourceId}}">Articles</a></span>
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{else}}
+    <p>
+        No more results
+    </p>
+{{end}}
+{{if ge .prevPage 1 }}
+    <a id="nextPage" href="{{url "Sources.Index" .size .prevPage}}">prev page</a>
+{{end}}
+    <a id="nextPage" href="{{url "Sources.Index" .size .nextPage}}">next page</a>
+</div>
+
+<a href="{{url "Sources.Add"}}">add new source</a>
+
+{{template "footer.html" .}}

@@ -1,0 +1,34 @@
+{{if .sources}}
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+        <th>City, State</th>
+        <th width="8%">Zip</th>
+        <th width="13%">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{range .sources}}
+    <tr>
+        <td>{{.Name}}</td>
+        <td>{{.Address}}</td>
+        <td>{{.City}}, {{.State}}, {{.Country}}</td>
+        <td>{{.Zip}}</td>
+        <td>
+            <a href="{{url "Sources.Show" .SourceId}}">View Source</a>
+        </td>
+    </tr>
+    {{end}}
+    </tbody>
+</table>
+<p>
+    <a id="nextPage" href="{{.nextPage}}">More results</a>
+</p>
+
+{{else}}
+<p>
+    No more results
+</p>
+{{end}}

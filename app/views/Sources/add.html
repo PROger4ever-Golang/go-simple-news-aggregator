@@ -1,0 +1,86 @@
+{{set . "title" "Add new source"}}
+{{append . "moreStyles" "ui-lightness/jquery-ui-1.7.2.custom.css"}}
+{{append . "moreScripts" "js/jquery-ui-1.7.2.custom.min.js"}}
+{{template "header.html" .}}
+
+<h1>Add new source</h1>
+
+<form method="POST" action="{{url "Sources.Add"}}">
+{{with $field := field "source.Name" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Name:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.Url" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Url:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.ArticlePageUrlsXpath" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Article Page Urls XPath:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.CardXpath" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Card XPath:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.TitleXpath" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Title XPath:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.BodyXpath" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Body XPath:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.ImgXpath" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Image XPath:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+{{with $field := field "source.PublicationTimeXpath" .}}
+    <p class="{{$field.ErrorClass}}">
+        <strong>Publication Time XPath:</strong>
+        <input type="text" name="{{$field.Name}}" size="16" value="{{$field.Flash}}">
+        * <span class="error">{{$field.Error}}</span>
+    </p>
+{{end}}
+
+
+    <p class="buttons">
+        <input type="submit" value="Proceed">
+        <a href="{{url "Sources.Show" .source.SourceId}}">Cancel</a>
+    </p>
+</form>
+
+<script type="text/javascript" charset="utf-8">
+    $(function () {
+        $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+    });
+</script>
+
+{{template "footer.html" .}}

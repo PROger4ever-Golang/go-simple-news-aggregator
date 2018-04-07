@@ -1,0 +1,9 @@
+{{template "header.html" .}}
+
+<h1>Edit source</h1>
+
+<form method="POST" action="{{url "Sources.SaveChanges" .source.SourceId}}">
+{{template "Sources/edit-part.html" .}}
+</form>
+
+{{template "footer.html" .}}

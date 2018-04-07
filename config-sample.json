@@ -1,5 +1,0 @@
-{
-  "mysql": {
-    "url": "root:123456789@/go-simple-news-aggregator?charset=utf8"
-  }
-}

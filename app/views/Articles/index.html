@@ -1,0 +1,39 @@
+{{set . "title" "Articles of the source"}}
+{{template "header.html" .}}
+
+<h1>Articles of the source</h1>
+
+<div id="result">
+{{if .articles}}
+    <table>
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Published</th>
+            <th width="7%">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{range .articles}}
+        <tr>
+            <td>{{.Title}}</td>
+            <td>{{.Published.Format "2006-01-02 15:04:05 Z07:00"}}</td>
+            <td>
+                <span><a href="{{url "Articles.Show" .SourceId .ArticleId}}">Show</a></span>
+            </td>
+        </tr>
+        {{end}}
+        </tbody>
+    </table>
+{{else}}
+    <p>
+        No more results
+    </p>
+{{end}}
+{{if ge .prevPage 1 }}
+    <a id="nextPage" href="{{url "Articles.Index" .size .prevPage}}">prev page</a>
+{{end}}
+    <a id="nextPage" href="{{url "Articles.Index" .size .nextPage}}">next page</a>
+</div>
+
+{{template "footer.html" .}}
