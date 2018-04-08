@@ -55,38 +55,38 @@ func init() {
 			"Url": true,
 		})
 		setColumnSizes(t, map[string]int{
-			"Name": 50,
-			"Url":  200,
-			"ArticlePageUrlsXpath": 1024,
-			"CardXpath":            1024,
-			"TitleXpath":           1024,
-			"BodyXpath":            1024,
-			"ImgXpath":             1024,
-			"PublicationTimeXpath": 1024,
+			"Name":             50,
+			"Url":              200,
+			"ArticleUrlsXpath": 1024,
+			"CardXpath":        1024,
+			"TitleXpath":       1024,
+			"BodyXpath":        1024,
+			"ImgXpath":         1024,
+			"PublishedXpath":   1024,
 		})
 		setColumnNotNull(t, map[string]bool{
-			"Url": true,
-			"ArticlePageUrlsXpath": false,
-			"CardXpath":            false,
-			"TitleXpath":           true,
-			"BodyXpath":            true,
-			"ImgXpath":             false,
-			"PublicationTimeXpath": true,
+			"Url":              true,
+			"ArticleUrlsXpath": false,
+			"CardXpath":        false,
+			"TitleXpath":       true,
+			"BodyXpath":        true,
+			"ImgXpath":         false,
+			"PublishedXpath":   true,
 		})
 
 		t = Dbm.AddTable(models.Article{}).SetKeys(true, "ArticleId")
 		t.ColMap("Source").Transient = true
-		t.ColMap("PublicationTime").Transient = true
-		t.SetUniqueTogether("SourceId", "PublicationTimeStr", "Title")
+		t.ColMap("Published").Transient = true
+		t.SetUniqueTogether("SourceId", "PublishedStr", "Title")
 		setColumnSizes(t, map[string]int{
 			"Url":    200,
 			"Title":  200,
 			"ImgUrl": 200,
 		})
 		setColumnNotNull(t, map[string]bool{
-			"Title":              true,
-			"Body":               true,
-			"PublicationTimeStr": true,
+			"Title":        true,
+			"Body":         true,
+			"PublishedStr": true,
 		})
 
 		rgorp.Db.TraceOn(revel.AppLog)
@@ -105,17 +105,16 @@ func init() {
 		}
 
 		sources := []*models.Source{
-			//TODO: improve XPaths for Lenta.RU
 			{
-				SourceId:             0,
-				Name:                 "Lenta.RU",
-				Url:                  "https://lenta.ru/rubrics/russia/",
-				ArticlePageUrlsXpath: `//*[@id="root"]/section[2]/div/div/div[1]/div/div[1]/section/div/div[2]/h3/a/@href`,
-				CardXpath:            `//div[@itemtype="http://schema.org/NewsArticle"]`,
-				TitleXpath:           `//div[@itemprop="headline"]`,
-				BodyXpath:            `//div[@itemprop="articleBody"]`,
-				ImgXpath:             `//img[@itemprop="url"]/@src`,
-				PublicationTimeXpath: `//time[@itemprop="datePublished"]/@datetime`,
+				Name: "Lenta.RU/RSS",
+				Url:  "https://lenta.ru/rss",
+				//ArticleUrlsXpath: "",
+				CardXpath:       `/rss/channel/item`,
+				TitleXpath:      `./title`,
+				BodyXpath:       `./description`,
+				ImgXpath:        `./enclosure/@url`,
+				PublishedXpath:  `./pubDate`,
+				PublishedFormat: time.RFC1123Z,
 			},
 		}
 		for _, source := range sources {
@@ -126,17 +125,15 @@ func init() {
 		now := time.Now()
 		articles := []*models.Article{
 			{
-				ArticleId: 0,
-				SourceId:  0,
+				SourceId: sources[0].SourceId,
 
 				Url:    "https://lenta.ru/news/2018/04/06/movement/",
-				Body:   "It's a body example",
+				Title:  "It's a title",
+				Body:   "It's a body",
 				ImgUrl: "//palacesquare.rambler.ru/ocwzjosl/MWF4eWE3LndhaHV1QHsiZGF0YSI6ey/JBY3Rpb24iOiJQcm94eSIsIlJlZmZl/cmVyIjoiaHR0cHM6Ly9sZW50YS5ydS/9uZXdzLzIwMTgvMDQvMDYvbW92ZW1l/bnQvIiwiUHJvdG9jb2wiOiJodHRwcz/oiLCJIb3N0IjoibGVudGEucnUifSwi/bGluayI6Imh0dHBzOi8vaWNkbi5sZW/50YS5ydS9pbWFnZXMvMjAxOC8wNC8w/Ni8xMS8yMDE4MDQwNjExNDQzNjgzNi/9waWNfODY4ZTQ2NTkwYmZkZTJlOTQx/MmViZjI5ZTg3YWVhMWQuanBnIn0%3D/",
 
-				PublicationTimeStr: now.Format(models.SQL_DATE_FORMAT),
-
-				PublicationTime: now,
-				Source:          sources[0],
+				Published: now,
+				Source:    sources[0],
 			},
 		}
 		for _, article := range articles {
