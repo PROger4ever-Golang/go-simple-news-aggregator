@@ -32,11 +32,11 @@
     </p>
 {{end}}
 {{if ge .prevPage 1 }}
-    <a id="nextPage" href="{{url "Sources.Index" .size .prevPage}}">prev page</a>
+    <a id="nextPage" href="{{url "Sources.Index" .size .prevPage}}">Prev page</a>
 {{end}}
-    <a id="nextPage" href="{{url "Sources.Index" .size .nextPage}}">next page</a>
+    <a id="nextPage" href="{{url "Sources.Index" .size .nextPage}}">Next page</a>
 </div>
 
-<a href="{{url "Sources.Add"}}">add new source</a>
+<a href="{{url "Sources.New"}}">New source</a>
 
 {{template "footer.html" .}}

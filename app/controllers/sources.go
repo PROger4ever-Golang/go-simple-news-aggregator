@@ -41,14 +41,18 @@ func (c Sources) loadSourceById(id int) *models.Source {
 }
 
 func (c Sources) loadSourceByUrl(url string) *models.Source {
-	source := models.Source{}
+	var sources []*models.Source
 	builder := c.Db.SqlStatementBuilder.Select("*").
 		From("Source").
+		Limit(1).
 		Where(squirrel.Eq{"Url": url})
-	if err := c.Txn.SelectOne(&source, builder); err != nil {
-		c.Log.Fatal("Unexpected error loading a source", "error", err)
+	if _, err := c.Txn.Select(&sources, builder); err != nil {
+		c.Log.Fatal("Unexpected error loading sources", "error", err)
 	}
-	return &source
+	if len(sources) == 0 {
+		return nil
+	}
+	return sources[0]
 }
 
 func (c Sources) New() revel.Result {

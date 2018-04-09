@@ -104,6 +104,7 @@ func init() {
 			panic(err)
 		}
 
+		//TODO: research the standardized articles scheme: http://schema.org/Article
 		sources := []*models.Source{
 			{
 				Name: "Lenta.RU/RSS",
@@ -115,6 +116,17 @@ func init() {
 				ImgXpath:        `./enclosure/@url`,
 				PublishedXpath:  `./pubDate`,
 				PublishedFormat: time.RFC1123Z,
+			},
+			{
+				Name:             "ria.ru -> world",
+				Url:              "https://ria.ru/world/",
+				ArticleUrlsXpath: `//*[contains(@class,"b-list__item")]/a/@href`,
+				CardXpath:        `//*[@itemtype="http://schema.org/Article"]`,
+				TitleXpath:       `.//*[@itemprop="name"]/span`,
+				BodyXpath:        `.//*[@itemprop="articleBody"]`,
+				ImgXpath:         `.//img[@itemprop="associatedMedia"]/src`,
+				PublishedXpath:   `.//*[@itemprop="dateCreated"]/@datetime`,
+				PublishedFormat:  "2006-01-02T15:04",
 			},
 		}
 		for _, source := range sources {

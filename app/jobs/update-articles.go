@@ -68,7 +68,7 @@ func (c *ArticlesUpdater) GetArticles(rootNode *xmlpath.Node, source *models.Sou
 	for iter.Next() {
 		var err error
 		cardNode := iter.Node()
-		article := models.Article{SourceId: source.SourceId, Source: source}
+		article := models.Article{SourceId: source.SourceId, Source: source, Url: url}
 		articles = append(articles, &article)
 
 		iter := xmlpath.MustCompile(source.TitleXpath).Iter(cardNode)
@@ -81,7 +81,7 @@ func (c *ArticlesUpdater) GetArticles(rootNode *xmlpath.Node, source *models.Sou
 		if !iter.Next() {
 			panic(errors.New("can't find body node in DOM"))
 		}
-		article.Body = iter.Node().String()
+		article.Body = iter.Node().String() //TODO: postprocess html/rss content (remove tags, CDATA and so on)
 
 		iter = xmlpath.MustCompile(source.ImgXpath).Iter(cardNode)
 		if iter.Next() {
@@ -142,10 +142,15 @@ func (c *ArticlesUpdater) ProcessSource(source *models.Source) {
 	if err != nil {
 		panic(err)
 	}
-	for articleUrls.Next() {
+
+	i := 0
+	for ; articleUrls.Next(); i++ {
 		articleUrl := c.GetAbsolutePath(base, articleUrls.Node().String())
 		articlePageNode := c.GetDomRoot(articleUrl)
 		c.ProcessArticleNode(articlePageNode, source, articleUrl)
+	}
+	if i == 0 {
+		panic(errors.New("can't find article urls in DOM"))
 	}
 }
 

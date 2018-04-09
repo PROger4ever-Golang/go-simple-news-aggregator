@@ -11,17 +11,20 @@ type Articles struct {
 }
 
 func (c Articles) loadArticleSafe(sourceId, id int) *models.Article {
-	article := models.Article{}
+	var articles []*models.Article
 	builder := c.Db.SqlStatementBuilder.Select("*").
 		From("Article").
 		Where(squirrel.And{
 			squirrel.Eq{"SourceId": sourceId},
 			squirrel.Eq{"ArticleId": id},
 		})
-	if err := c.Txn.SelectOne(&article, builder); err != nil {
-		c.Log.Fatal("Unexpected error loading an article", "error", err)
+	if _, err := c.Txn.Select(&articles, builder); err != nil {
+		c.Log.Fatal("Unexpected error loading articles", "error", err)
 	}
-	return &article
+	if len(articles) == 0 {
+		return nil
+	}
+	return articles[0]
 }
 
 func (c Articles) Index(sourceId int, size, page uint64) revel.Result {
@@ -35,7 +38,10 @@ func (c Articles) Index(sourceId int, size, page uint64) revel.Result {
 	nextPage := page + 1
 
 	var articles []*models.Article
-	builder := c.Db.SqlStatementBuilder.Select("*").From("Article").Offset((page - 1) * size).Limit(size)
+	builder := c.Db.SqlStatementBuilder.Select("*").
+		From("Article").
+		Where("SourceId=?", sourceId).
+		Offset((page - 1) * size).Limit(size)
 	if _, err := c.Txn.Select(&articles, builder); err != nil {
 		c.Log.Fatal("Unexpected error loading articles", "error", err)
 	}
