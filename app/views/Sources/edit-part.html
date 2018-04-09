@@ -1,0 +1,76 @@
+{{with $field := field "source.Name" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Name:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    * <span class="error">{{$field.Error}} {{$field.Flash}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.Url" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Url:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    * <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.ArticleUrlsXpath" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Article Urls XPath:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.CardXpath" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Card XPath:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.TitleXpath" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Title XPath:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    * <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.BodyXpath" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Body XPath:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    * <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.ImgXpath" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Image XPath:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.PublishedXpath" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Published XPath:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    * <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+{{with $field := field "source.PublishedFormat" .}}
+<p class="{{$field.ErrorClass}}">
+    <strong>Published Format:</strong>
+    <input type="text" name="{{$field.Name}}" size="55" value="{{$field.Value}}">
+    * <span class="error">{{$field.Error}}</span>
+</p>
+{{end}}
+
+<p class="buttons">
+    <input type="submit" value="Save Changes">
+    <a href="{{url "Sources.Index"}}">Back to search</a>
+</p>

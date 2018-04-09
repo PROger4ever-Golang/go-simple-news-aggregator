@@ -1,0 +1,37 @@
+{{template "header.html" .}}
+
+<h1>View source</h1>
+
+{{with .source}}
+<form action="{{url "Sources.Book" .SourceId}}">
+
+    <p>
+        <strong>Name:</strong> {{.Name}}
+    </p>
+    <p>
+        <strong>Address:</strong> {{.Address}}
+    </p>
+    <p>
+        <strong>City:</strong> {{.City}}
+    </p>
+    <p>
+        <strong>State:</strong> {{.State}}
+    </p>
+    <p>
+        <strong>Zip:</strong> {{.Zip}}
+    </p>
+    <p>
+        <strong>Country:</strong> {{.Country}}
+    </p>
+    <p>
+        <strong>Nightly rate:</strong> {{.Price}}
+    </p>
+
+    <p class="buttons">
+        <input type="submit" value="Book Source">
+        <a href="{{url "Sources.Index"}}">Back to search</a>
+    </p>
+</form>
+{{end}}
+
+{{template "footer.html" .}}

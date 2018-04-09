@@ -1,0 +1,20 @@
+{{template "header.html" .}}
+
+{{with .article}}
+
+<h1>{{.Title}}</h1>
+
+<h2>Url</h2>
+<div style="word-wrap: break-word;">{{.Url}}</div>
+
+<h2>Body</h2>
+<div style="word-wrap: break-word;">{{.Body}}</div>
+
+<h2>Image Url</h2>
+<div style="word-wrap: break-word;">{{.ImgUrl}}</div>
+
+<h2>Published</h2>
+{{.Published.Format "2006-01-02 15:04:05 Z07:00"}}
+{{end}}
+
+{{template "footer.html" .}}

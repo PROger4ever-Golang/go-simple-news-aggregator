@@ -1,0 +1,10 @@
+{{set . "title" "Add new source"}}
+{{template "header.html" .}}
+
+<h1>Add new source</h1>
+
+<form method="POST" action="{{url "Sources.Add"}}">
+{{template "Sources/edit-part.html" .}}
+</form>
+
+{{template "footer.html" .}}

@@ -18,4 +18,6 @@ bin/
 .idea
 
 # Other unnecessary project files
-config.json
+routes/
+tmp/
+test-results/
